@@ -1,23 +1,14 @@
+# OpenRouter lists drex-max with text input only (https://openrouter.ai/api/v1/models?output_modalities=text,decisions,
+# accessed 2026-10-26), so the lab's image input is narrowed to text here.
 schema = 2
-type = "decision"
-name = "Drex Max"
-description = "Decision model for typed evaluation of shared state"
-open_weights = false
-release_date = "2026-10-21"
+base_model = "nace-ai/drex-max"
 
 [modalities]
 input = ["text"]
-output = ["text"]
+output = ["decision"]
 
 [capabilities]
-tools = { supported = false }
-reasoning = { supported = false }
 structured_output = false
-temperature = false
-
-[limit]
-context = 262_144
-output = 0
 
 [api.systemone]
 sdk = { aisdk = "@ai-sdk/typesafe-ai", opencodeai = "@opencode/ai/providers/openrouter" }

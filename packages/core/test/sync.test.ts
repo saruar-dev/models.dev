@@ -7795,6 +7795,30 @@ test("inherits canonical Drex2 metadata instead of retaining an OpenRouter compl
   }
 });
 
+test("narrows canonical Drex Max to OpenRouter's text-only listing without a completion limit", () => {
+  for (const existing of [undefined, { limit: { output: 235_929 } }]) {
+    const model = buildOpenRouterModel(openRouterModel({
+      id: "nace-ai/drex-max",
+      name: "Nace.AI: Drex Max",
+      knowledge_cutoff: null,
+      context_length: 262_144,
+      architecture: { input_modalities: ["text"], output_modalities: ["decisions"] },
+      pricing: { prompt: "0.00000006", completion: "0" },
+      top_provider: { context_length: 262_144, max_completion_tokens: 235_929 },
+      supported_parameters: [],
+    }), existing);
+
+    expect(model).toMatchObject({
+      base_model: "nace-ai/drex-max",
+      cost: { input: 0.06, output: 0 },
+      modalities: { input: ["text"] }, // the lab reads images; OpenRouter lists text only
+    });
+    for (const inherited of ["type", "description", "limit", "release_date", "structured_output", "open_weights"]) {
+      expect(model).not.toHaveProperty(inherited);
+    }
+  }
+});
+
 test("parses nullable EmpirioLabs release dates", () => {
   expect(empiriolabs.parseModels({
     data: [{ id: "unknown-text-model", category: "text", model_released_at: null }],

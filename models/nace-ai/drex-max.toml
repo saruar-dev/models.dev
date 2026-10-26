@@ -1,0 +1,38 @@
+# Sources (accessed 2026-10-26):
+# - https://console.nace.ai/docs/drex/guides/drex-max: Drex Max is the most accurate Drex model and the only one that
+#   reads images (PNG, JPEG or WebP; up to 8 per request, inline base64 or data URL, or an uploaded workspace file).
+#   It takes the same POST /v1/systemone request as every Drex model: a state plus typed noul, choice and score
+#   questions, answered as calibrated probabilities. Up to 262,144 tokens per question (the state plus that
+#   question, image tokens included), a state of up to 131,072 tokens, at most 16 questions per request.
+# - https://console.nace.ai/docs/drex/reference/models: released 2026-10-13; a pinned id (drex-latest points to
+#   drex-v2.0, not to Drex Max).
+# - GET https://console.nace.ai/v1/models: "Drex Max multimodal decision model, the most accurate Drex",
+#   release_date 2026-10-13.
+# No weights are published: the model is served through the API only.
+# Output: decision probabilities, not generated text. Sampling: the request takes no sampling parameters.
+schema = 2
+type = "decision"
+name = "Drex Max"
+description = "Nace.AI's most accurate System One decision model, returning typed, calibrated probabilities for yes/no, choice and score questions about text and images without generating text"
+open_weights = false
+release_date = "2026-10-13"
+
+[modalities]
+input = ["text", "image/png", "image/jpeg", "image/webp"]
+output = ["decision"]
+
+[capabilities]
+tools = { supported = false }
+reasoning = { supported = false }
+temperature = false
+top_p = false
+top_k = false
+
+[limit]
+context = 262_144
+output = 0
+
+[[links]]
+label = "Documentation"
+url = "https://console.nace.ai/docs/drex/guides/drex-max"
+type = "docs"
